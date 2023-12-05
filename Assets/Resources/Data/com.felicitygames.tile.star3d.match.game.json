@@ -1,0 +1,74 @@
+{
+  "combopack1": {
+    "price": "$2.99",
+    "packName": "SPECIAL BUNDLE",
+    "rewards": {
+      "Coin": 2000,
+      "Hint": 3,
+      "Undo": 3,
+      "Freeze": 3,
+      "Swap": 3
+    }
+  },
+  "combopack2": {
+    "price": "$3.99",
+    "packName": "MEGA BUNDLE",
+    "rewards": {
+      "Coin": 5000,
+      "Hint": 3,
+      "Undo": 3,
+      "Freeze": 3,
+      "Swap": 3
+    }
+  },
+  "combopack3": {
+    "price": "$5.99",
+    "packName": "SPECIAL BUNDLE",
+    "rewards": {
+      "Coin": 6000,
+      "Hint": 6,
+      "Undo": 6,
+      "Freeze": 6,
+      "Swap": 6
+    }
+  },
+  "combopack4": {
+    "price": "$7.99",
+    "packName": "HUGE BUNDLE",
+    "rewards": {
+      "Coin": 10000,
+      "Hint": 12,
+      "Undo": 12,
+      "Freeze": 12,
+      "Swap": 12
+    }
+  },
+  "coinpack1": {
+    "price": "$0.99",
+    "packName": "1000 Coins",
+    "rewards": {
+      "Coin": 1000
+    }
+  },
+  "coinpack2": {
+    "price": "$1.99",
+    "packName": "3000 Coins",
+    "rewards": {
+      "Coin": 3000
+    }
+  },
+  "coinpack3": {
+    "price": "$4.99",
+    "packName": "12000 Coins",
+    "rewards": {
+      "Coin": 12000
+    }
+  },
+  "removeads": {
+    "price": "$1.99",
+    "packName": "Remove Ads!",
+    "rewards": {
+      "removeads": 1
+    }
+  }
+}
