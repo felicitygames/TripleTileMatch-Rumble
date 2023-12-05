@@ -216,7 +216,7 @@ public class HomeScreenSontroller : SingletonComponent<HomeScreenSontroller>
             }
             else
             {
-                starChestText.text = "232" + "/" + targetDiamondCount;
+                starChestText.text = "0" + "/" + targetDiamondCount;
             }
             starChestIconAnim.enabled = false;
             starChestIconAnim.transform.GetComponent<RectTransform>().anchoredPosition = new Vector2(starChestIconAnim.transform.GetComponent<RectTransform>().anchoredPosition.x, 10);
