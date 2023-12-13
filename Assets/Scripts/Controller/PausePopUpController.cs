@@ -9,22 +9,6 @@ public class PausePopUpController : MonoBehaviour
     [SerializeField] private GameObject musicOn, musicOff, soundOn, soundOff;
     public static PausePopUpController instance;
 
-    private void Update(){
-        if(PlayerPrefs.HasKey("doneReplay")){
-            PlayerPrefs.DeleteKey("doneReplay");
-            if(PlayerPrefs.GetInt("InitialMusic") == 1){
-            SettingPopUpController.instance.Unmute_Music();
-            }
-            if(PlayerPrefs.GetInt("InitialSound") == 1){
-            SettingPopUpController.instance.Unmute_Sound();
-            }
-            AfterRetryAd();
-        }
-        if(PlayerPrefs.HasKey("resumeEvent")){
-            PlayerPrefs.DeleteKey("resumeEvent");
-            CloseThisPopup();
-        }
-    }
     private void Start()
     {
         HomeButtonManager.instance.CheckHome();
@@ -76,8 +60,6 @@ public class PausePopUpController : MonoBehaviour
 
     public void On_Home_Btn_Click()
     {   
-        
-        GlanceAds.EndAnalytics(GeneralDataManager.GameData.LevelNo);
         GameManager.Play_Button_Click_Sound();
         GeneralRefrencesManager.Inst.Clear_Level();
         GameManager.Inst.Show_Screen(GameManager.Screens.HomeScreen);
@@ -87,16 +69,14 @@ public class PausePopUpController : MonoBehaviour
     public void On_Retry_Btn_Click()
     {  
         GameManager.Play_Button_Click_Sound();
-        GlanceAds.EndAnalytics(GeneralDataManager.GameData.LevelNo);
-        GlanceAds.ReplayAd("replay");
-    }
-
-     public void AfterRetryAd()
-    {   GlanceAds.ReplayAnalytics(GeneralDataManager.GameData.LevelNo);
-        GlanceAds.LevelAnalytics(GeneralDataManager.GameData.LevelNo);
         CloseThisPopup();
         GeneralRefrencesManager.Inst.Clear_Level();
         GridManager.Inst.Generate_Grid(GeneralDataManager.GameData.LevelNo);
+    }
+
+     public void AfterRetryAd()
+    {   
+        
     }
 
     public void CloseThisPopup()

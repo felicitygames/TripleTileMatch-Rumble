@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using Newtonsoft.Json;
 
 public class GameOverPopUpController : SingletonComponent<GameOverPopUpController>
 {
@@ -18,22 +19,7 @@ public class GameOverPopUpController : SingletonComponent<GameOverPopUpControlle
     {
         if(PlayerPrefs.HasKey("GameOverReward")){
             PlayerPrefs.DeleteKey("GameOverReward");
-            if(PlayerPrefs.GetInt("InitialMusic") == 1){
-            SettingPopUpController.instance.Unmute_Music();
-            }
-            if(PlayerPrefs.GetInt("InitialSound") == 1){
-            SettingPopUpController.instance.Unmute_Sound();
-            }
             Give_Reward();    
-        }
-        if(PlayerPrefs.HasKey("CancelGameOverReward")){
-            PlayerPrefs.DeleteKey("CancelGameOverReward");
-            if(PlayerPrefs.GetInt("InitialMusic") == 1){
-            SettingPopUpController.instance.Unmute_Music();
-            }
-            if(PlayerPrefs.GetInt("InitialSound") == 1){
-            SettingPopUpController.instance.Unmute_Sound();
-            }
         }
     }
 
@@ -64,7 +50,6 @@ public class GameOverPopUpController : SingletonComponent<GameOverPopUpControlle
 
     private void Home_Btn_Click()
     {
-        GlanceAds.EndAnalytics(GeneralDataManager.GameData.LevelNo);
         GeneralRefrencesManager.Inst.Clear_Level();
         GameManager.Inst.Show_Screen(GameManager.Screens.HomeScreen);
         CloseThisPopup();
@@ -79,9 +64,6 @@ public class GameOverPopUpController : SingletonComponent<GameOverPopUpControlle
 
     private void Restart_Btn_Click()
     {
-        GlanceAds.EndAnalytics(GeneralDataManager.GameData.LevelNo);
-        GlanceAds.ReplayAnalytics(GeneralDataManager.GameData.LevelNo);
-        GlanceAds.LevelAnalytics(GeneralDataManager.GameData.LevelNo);
         GeneralRefrencesManager.Inst.Clear_Level();
         GridManager.Inst.Generate_Grid(GeneralDataManager.GameData.LevelNo);
         CloseThisPopup();
@@ -90,8 +72,12 @@ public class GameOverPopUpController : SingletonComponent<GameOverPopUpControlle
     public void On_Watch_Ad_Btn_Click()
     {
         GameManager.Play_Button_Click_Sound();
-        GlanceAds.RewardedAdsAnalytics("GameOverReward","CancelGameOverReward");
-        GlanceAds.RewardedAd("GameOverReplay");
+        if(PlayerPrefs.GetFloat("RumbleBalance") >= 200){
+            StartCoroutine(RumbleSDK.instance.UpdateBalanceAsync(200,"GameOverRewardAd"));
+        }
+        else{
+            RumbleSDK.instance.OnIAPButton();
+        }
         //AdsManager.inst.LoadAndShow_RewardVideo("GameOver");
     }
 
@@ -106,6 +92,7 @@ public class GameOverPopUpController : SingletonComponent<GameOverPopUpControlle
         if (GeneralDataManager.GameData.Coins >= 120)
         {
             GameManager.Decrease_Coin(120);
+            StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData)));
             Resat_Game_Play_For_Game_Over();
         }
         else

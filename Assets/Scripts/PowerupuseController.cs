@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static GameManager;
+using Newtonsoft.Json;
 
 public class PowerupuseController : SingletonComponent<ShopPopUpController>
 {
@@ -15,65 +16,32 @@ public class PowerupuseController : SingletonComponent<ShopPopUpController>
     {
         if(PlayerPrefs.HasKey("PowerUpReward")){
             PlayerPrefs.DeleteKey("PowerUpReward");
-            if(PlayerPrefs.GetInt("InitialMusic") == 1){
-            SettingPopUpController.instance.Unmute_Music();
-            }
-            if(PlayerPrefs.GetInt("InitialSound") == 1){
-            SettingPopUpController.instance.Unmute_Sound();
-            }
             UsePower(GamePlayUIController.instance.PowerIndex);
-        }
-        if(PlayerPrefs.HasKey("PowerUpReward")){
-            PlayerPrefs.DeleteKey("PowerUpReward");
-            if(PlayerPrefs.GetInt("InitialMusic") == 1){
-            SettingPopUpController.instance.Unmute_Music();
-            }
-            if(PlayerPrefs.GetInt("InitialSound") == 1){
-            SettingPopUpController.instance.Unmute_Sound();
-            }
-            UsePower(GamePlayUIController.instance.PowerIndex);
-        }
-        if(PlayerPrefs.HasKey("CancelPowerUpReward")){
-            PlayerPrefs.DeleteKey("CancelPowerUpReward");
-            if(PlayerPrefs.GetInt("InitialMusic") == 1){
-            SettingPopUpController.instance.Unmute_Music();
-            }
-            if(PlayerPrefs.GetInt("InitialSound") == 1){
-            SettingPopUpController.instance.Unmute_Sound();
-            }
         }
     }
     private void Start()
     {
-        GeneralDataManager.Save_Data();
         CoinsButton.GetComponent<Button>().interactable = true;
         
         Coins.text = PlayerPrefs.GetInt("Coins").ToString();
     }
     public void ContinueWithAd()
     {
-        GlanceAds.RewardedAdsAnalytics("PowerUpReward","CancelPowerUpReward");
-        GlanceAds.RewardedAd("PowerUpAds");
+        if(PlayerPrefs.GetFloat("RumbleBalance") >= 200){
+            StartCoroutine(RumbleSDK.instance.UpdateBalanceAsync(200,"PowerUpRewardAd"));
+        }
+        else{
+            RumbleSDK.instance.OnIAPButton();
+        }
     }
     public void ContinueWithCoins()
     {
         //Call the method directly after coins deductions
         if(GeneralDataManager.GameData.Coins >= 100)
         {
-            if(GamePlayUIController.instance.PowerIndex == 0){
-            GlanceAds.IngameAnalytics("Hint PowerUp",100,GeneralDataManager.GameData.LevelNo);
-            }
-            else if(GamePlayUIController.instance.PowerIndex == 1){
-            GlanceAds.IngameAnalytics("Undo PowerUp",100,GeneralDataManager.GameData.LevelNo);
-            }
-            else if(GamePlayUIController.instance.PowerIndex == 2){
-            GlanceAds.IngameAnalytics("Swap PowerUp",100,GeneralDataManager.GameData.LevelNo);
-            }
-            else if(GamePlayUIController.instance.PowerIndex == 3){
-            GlanceAds.IngameAnalytics("Freeze PowerUp",100,GeneralDataManager.GameData.LevelNo);
-            }
             UsePower(GamePlayUIController.instance.PowerIndex);
             Decrease_Coin(100);
+            StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData)));
         }
         else
         {
@@ -83,6 +51,8 @@ public class PowerupuseController : SingletonComponent<ShopPopUpController>
     }
     public void UsePower(int index)
     {
+        GeneralDataManager.Save_Data();
+        StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData)));
         if(index == 0)
         {
             GamePlayUIController.instance.UseHint();

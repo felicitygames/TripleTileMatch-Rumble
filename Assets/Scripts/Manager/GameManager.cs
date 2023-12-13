@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections;
 using DG.Tweening;
 using UnityEngine.Serialization;
+using Newtonsoft.Json;
 
 public class GameManager : SingletonComponent<GameManager>
 {
@@ -38,7 +39,6 @@ public class GameManager : SingletonComponent<GameManager>
 
     protected override void Awake()
     {   
-        GeneralDataManager.Save_Data();
         var (canvasWidth, canvasHeight) = GeneralRefrencesManager.Inst.Get_Canvas_Width_Height();
         bottom.position = new Vector3(bottom.transform.position.x,
             (float)(-22.13612 + (2.796656 * Mathf.Log(canvasWidth))) - 1f, bottom.transform.position.z);
@@ -55,11 +55,11 @@ public class GameManager : SingletonComponent<GameManager>
                 homeScreen.SetActive(false);
                 Show_Screen(Screens.LunchScreen);
         #endif*/
-        // // homeScreen.SetActive(false);
-        // // Show_Screen(Screens.LunchScreen);
+        homeScreen.SetActive(false);
+        Show_Screen(Screens.LunchScreen);
         activeScreen = Screens.LunchScreen;
-        lunchScreen.SetActive(false);
-        Show_Screen(Screens.HomeScreen);
+        //lunchScreen.SetActive(false);
+        //Show_Screen(Screens.HomeScreen);
     }
 
 
@@ -284,12 +284,14 @@ public class GameManager : SingletonComponent<GameManager>
     {
         GameData.Coins += amount;
         PlayerPrefs.SetInt("Coins", GameData.Coins);
+        GeneralDataManager.Save_Data();
     }
 
     internal static void Decrease_Coin(int amount)
     {
         GameData.Coins -= amount;
         PlayerPrefs.SetInt("Coins", GameData.Coins);
+        GeneralDataManager.Save_Data();
     }
 
     internal GameObject ToastRef;

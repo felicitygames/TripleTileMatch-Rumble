@@ -19,24 +19,8 @@ public class DailyRewardPopUpController : MonoBehaviour
     {
         if(PlayerPrefs.HasKey("DailyReward")){
             PlayerPrefs.DeleteKey("DailyReward");
-            if(PlayerPrefs.GetInt("InitialMusic") == 1){
-            SettingPopUpController.instance.Unmute_Music();
-            }
-            if(PlayerPrefs.GetInt("InitialSound") == 1){
-            SettingPopUpController.instance.Unmute_Sound();
-            }
             Give_Reward();    
             CloseThisPopup(); 
-        }
-        if(PlayerPrefs.HasKey("CancelDailyReward")){
-            PlayerPrefs.DeleteKey("CancelDailyReward");
-            if(PlayerPrefs.GetInt("InitialMusic") == 1){
-            SettingPopUpController.instance.Unmute_Music();
-            }
-            if(PlayerPrefs.GetInt("InitialSound") == 1){
-            SettingPopUpController.instance.Unmute_Sound();
-            }
-            CloseThisPopup();
         }
     }
 
@@ -77,8 +61,12 @@ public class DailyRewardPopUpController : MonoBehaviour
     {
         GameManager.Play_Button_Click_Sound();
         GeneralRefrencesManager.Inst.No_Click_Panel_On_Off(true);
-        GlanceAds.RewardedAdsAnalytics("DailyReward","CancelDailyReward");
-        GlanceAds.RewardedAd("DailyReward");
+        if(PlayerPrefs.GetFloat("RumbleBalance") >= 200){
+            StartCoroutine(RumbleSDK.instance.UpdateBalanceAsync(200,"DailyRewardAd"));
+        }
+        else{
+            RumbleSDK.instance.OnIAPButton();
+        }
         ////AdsManager.inst.LoadAndShow_RewardVideo("DailyReward");
     }
     public void Give_Reward()

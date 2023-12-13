@@ -210,7 +210,6 @@ public class GeneralRefrencesManager : SingletonComponent<GeneralRefrencesManage
 
         if (elementParent.childCount != 0) yield break;
         No_Click_Panel_On_Off(true);
-        GlanceAds.LevelCompletedAnalytics(GameData.LevelNo);
         StartCoroutine(Show_Level_Complete_PopUp());
     }
 

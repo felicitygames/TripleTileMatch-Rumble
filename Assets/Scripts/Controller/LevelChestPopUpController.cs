@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Newtonsoft.Json;
 
 public class LevelChestPopUpController : MonoBehaviour
 {
@@ -14,22 +15,7 @@ public class LevelChestPopUpController : MonoBehaviour
     {
         if(PlayerPrefs.HasKey("LevelChestReward")){
             PlayerPrefs.DeleteKey("LevelChestReward");
-            if(PlayerPrefs.GetInt("InitialMusic") == 1){
-            SettingPopUpController.instance.Unmute_Music();
-            }
-            if(PlayerPrefs.GetInt("InitialSound") == 1){
-            SettingPopUpController.instance.Unmute_Sound();
-            }
             Give_Reward();    
-        }
-        if(PlayerPrefs.HasKey("CancelLevelChestReward")){
-            PlayerPrefs.DeleteKey("CancelLevelChestReward");
-            if(PlayerPrefs.GetInt("InitialMusic") == 1){
-            SettingPopUpController.instance.Unmute_Music();
-            }
-            if(PlayerPrefs.GetInt("InitialSound") == 1){
-            SettingPopUpController.instance.Unmute_Sound();
-            }
         }
     }
 
@@ -42,6 +28,7 @@ public class LevelChestPopUpController : MonoBehaviour
         HomeScreenSontroller.Inst.Set_Level_Chest_Text();
         GetComponent<Animator>().SetTrigger("Play");
         GeneralDataManager.GameData.IsLevelChestClaim = true;
+         StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData)));
     }
 
     public void Give_Coin_Anim()
@@ -52,8 +39,12 @@ public class LevelChestPopUpController : MonoBehaviour
     public void On_GetX2_Btn_Click()
     {
         GameManager.Play_Button_Click_Sound();
-        GlanceAds.RewardedAdsAnalytics("LevelChestReward","CancelLevelChestReward");
-        GlanceAds.RewardedAd("LevelChest");
+        if(PlayerPrefs.GetFloat("RumbleBalance") >= 200){
+            StartCoroutine(RumbleSDK.instance.UpdateBalanceAsync(200,"LevelChestRewardAd"));
+        }
+        else{
+            RumbleSDK.instance.OnIAPButton();
+        }
         //AdsManager.inst.LoadAndShow_RewardVideo("LevelChest");
     }
 
@@ -62,6 +53,7 @@ public class LevelChestPopUpController : MonoBehaviour
         GameManager.Increase_Coin(amount);
         GeneralRefrencesManager.Inst.No_Click_Panel_On_Off(true);
         StartCoroutine(GameManager.Give_Coin_With_Anim(0, chestIcon, 0, CloseThisPopup, HomeScreenSontroller.Inst.coinRef));
+        StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData)));
     }
 
     public void On_Close_Btn_Click()

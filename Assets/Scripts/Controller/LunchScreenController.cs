@@ -7,7 +7,6 @@ public class LunchScreenController : SingletonComponent<LunchScreenController>
 {
     public void Complete()
     {   
-        //GlanceAds.LoadAnalytics();
         GameManager.Inst.Show_Screen(GameManager.Screens.HomeScreen);
     }
     public void CloseThisScreen()

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json;
 
 public class StarChestOpenPopUpController : MonoBehaviour
 {
@@ -14,22 +15,7 @@ public class StarChestOpenPopUpController : MonoBehaviour
     {
         if(PlayerPrefs.HasKey("StarChestReward")){
             PlayerPrefs.DeleteKey("StarChestReward");
-            if(PlayerPrefs.GetInt("InitialMusic") == 1){
-            SettingPopUpController.instance.Unmute_Music();
-            }
-            if(PlayerPrefs.GetInt("InitialSound") == 1){
-            SettingPopUpController.instance.Unmute_Sound();
-            }
             Give_Reward();    
-        }
-        if(PlayerPrefs.HasKey("CancelStarChestReward")){
-            PlayerPrefs.DeleteKey("CancelStarChestReward");
-            if(PlayerPrefs.GetInt("InitialMusic") == 1){
-            SettingPopUpController.instance.Unmute_Music();
-            }
-            if(PlayerPrefs.GetInt("InitialSound") == 1){
-            SettingPopUpController.instance.Unmute_Sound();
-            }
         }
     }
 
@@ -48,6 +34,7 @@ public class StarChestOpenPopUpController : MonoBehaviour
 
         GameManager.Play_Button_Click_Sound();
         GameManager.Increase_Coin(amount);
+         StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData)));
         adBtn.SetActive(true);
         closeBtn.SetActive(true);
         GetComponent<Animator>().SetTrigger("Play");
@@ -61,9 +48,12 @@ public class StarChestOpenPopUpController : MonoBehaviour
     public void On_GetX2_Btn_Click()
     {
         GameManager.Play_Button_Click_Sound();
-        GlanceAds.RewardedAdsAnalytics("StarChestReward","CancelStarChestReward");
-        GlanceAds.RewardedAd("StarChest");
-        //AdsManager.inst.LoadAndShow_RewardVideo("StarChest");
+        if(PlayerPrefs.GetFloat("RumbleBalance") >= 200){
+            StartCoroutine(RumbleSDK.instance.UpdateBalanceAsync(200,"StarChestRewardAd"));
+        }
+        else{
+            RumbleSDK.instance.OnIAPButton();
+        }
     }
     public void On_Close_Btn_Click()
     {
@@ -74,6 +64,7 @@ public class StarChestOpenPopUpController : MonoBehaviour
     public void Give_Reward()
     {
         GameManager.Increase_Coin(amount);
+        StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData)));
         GeneralRefrencesManager.Inst.No_Click_Panel_On_Off(true);
         StartCoroutine(GameManager.Give_Coin_With_Anim(0, chestIcon, 0, CloseThisPopup, HomeScreenSontroller.Inst.coinRef));
     }

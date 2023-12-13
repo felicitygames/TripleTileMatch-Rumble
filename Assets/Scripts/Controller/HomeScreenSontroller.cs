@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
 using static GameManager;
+using Newtonsoft.Json;
 using static GeneralDataManager;
 
 public class HomeScreenSontroller : SingletonComponent<HomeScreenSontroller>
@@ -25,28 +26,13 @@ public class HomeScreenSontroller : SingletonComponent<HomeScreenSontroller>
     {
         if (PlayerPrefs.HasKey("IncreaseCoinReward")){
             PlayerPrefs.DeleteKey("IncreaseCoinReward");
-            if(PlayerPrefs.GetInt("InitialMusic") == 1){
-            SettingPopUpController.instance.Unmute_Music();
-            }
-            if(PlayerPrefs.GetInt("InitialSound") == 1){
-            SettingPopUpController.instance.Unmute_Sound();
-            }
             AfterIncreaseAds(); 
-        }
-        if(PlayerPrefs.HasKey("CancelIncreaseCoinReward")){
-            PlayerPrefs.DeleteKey("CancelIncreaseCoinReward");
-            if(PlayerPrefs.GetInt("InitialMusic") == 1){
-            SettingPopUpController.instance.Unmute_Music();
-            }
-            if(PlayerPrefs.GetInt("InitialSound") == 1){
-            SettingPopUpController.instance.Unmute_Sound();
-            }
         }
     }
 
     private void OnEnable()
     {  
-         GeneralDataManager.Save_Data();
+         //GeneralDataManager.Save_Data();
         if(!PlayerPrefs.HasKey("Music")){
             PlayerPrefs.SetInt("Music",1);
             PlayerPrefs.SetInt("Sound",1);
@@ -83,15 +69,6 @@ public class HomeScreenSontroller : SingletonComponent<HomeScreenSontroller>
 
     public void On_Play_Btn_Click()
     {
-        if(PlayerPrefs.GetInt("firstGlance") == 1){
-            GlanceAds.ReplayAnalytics(GeneralDataManager.GameData.LevelNo);
-            GlanceAds.LevelAnalytics(GeneralDataManager.GameData.LevelNo);
-        }
-        else{
-            PlayerPrefs.SetInt("firstGlance",1);
-            GlanceAds.StartAnalytics();
-            GlanceAds.LevelAnalytics(GeneralDataManager.GameData.LevelNo);
-        }
         Play_Button_Click_Sound();
         GameManager.Inst.Show_Screen(Screens.GameScreen);
     }
@@ -106,8 +83,12 @@ public class HomeScreenSontroller : SingletonComponent<HomeScreenSontroller>
     {
         Play_Button_Click_Sound();
         //We will show ad later
-        GlanceAds.RewardedAdsAnalytics("IncreaseCoinReward","CancelIncreaseCoinReward");
-        GlanceAds.RewardedAd("IncreaseCoin");
+        if(PlayerPrefs.GetFloat("RumbleBalance") >= 200){
+            StartCoroutine(RumbleSDK.instance.UpdateBalanceAsync(200,"IncreaseCoinRewardAd"));
+        }
+        else{
+            RumbleSDK.instance.OnIAPButton();
+        }
         //GameManager.Inst.Show_Popup(Popups.Shop);
         
     }
@@ -115,6 +96,7 @@ public class HomeScreenSontroller : SingletonComponent<HomeScreenSontroller>
     public void AfterIncreaseAds(){
         Increase_Coin(150);
         GeneralDataManager.Save_Data();
+        StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData)));
         Set_Coin_Diamond_Level_Text();
     }
 

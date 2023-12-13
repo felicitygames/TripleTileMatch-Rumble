@@ -452,7 +452,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: WATCH
+  m_Text: 200
 --- !u!114 &5769379158567038645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -831,6 +831,7 @@ GameObject:
   - component: {fileID: 439586437641096418}
   - component: {fileID: 6863699233641811574}
   - component: {fileID: 2434590617412498883}
+  - component: {fileID: 6666869246465328610}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -847,7 +848,7 @@ RectTransform:
   m_GameObject: {fileID: 2840062228996021693}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4914000268877082626}
@@ -886,7 +887,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -8015071549688028048, guid: 18d735f8e121bc548b266b94d8a215ce, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 79f228c6d51ac3047b2163195b579fdf, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -896,6 +897,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6666869246465328610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2840062228996021693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 3, y: 3}
+  m_UseGraphicAlpha: 1
 --- !u!1 &2870230068564922948
 GameObject:
   m_ObjectHideFlags: 0

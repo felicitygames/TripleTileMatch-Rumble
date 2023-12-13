@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using static GeneralDataManager;
+using Newtonsoft.Json;
 
 public class LevelCompletePopUpController : MonoBehaviour
 {
@@ -27,11 +28,7 @@ public class LevelCompletePopUpController : MonoBehaviour
 
     private void Awake()
     {
-        GeneralDataManager.Save_Data();
-        if (GameData.LevelNo % 3 == 0)
-        {
-            GlanceAds.ReplayAd("replay1w");
-        }
+       
     }
 
     private float endValue = 0f;
@@ -40,33 +37,9 @@ public class LevelCompletePopUpController : MonoBehaviour
 
     public void Update()
     {
-        if (PlayerPrefs.HasKey("doneReplay1w")){
-            PlayerPrefs.DeleteKey("doneReplay1w");
-            if(PlayerPrefs.GetInt("InitialMusic") == 1){
-            SettingPopUpController.instance.Unmute_Music();
-            }
-            if(PlayerPrefs.GetInt("InitialSound") == 1){
-            SettingPopUpController.instance.Unmute_Sound();
-            }
-        }
         if(PlayerPrefs.HasKey("LevelCompleteReward")){
             PlayerPrefs.DeleteKey("LevelCompleteReward");
-            if(PlayerPrefs.GetInt("InitialMusic") == 1){
-            SettingPopUpController.instance.Unmute_Music();
-            }
-            if(PlayerPrefs.GetInt("InitialSound") == 1){
-            SettingPopUpController.instance.Unmute_Sound();
-            }
             Give_Reward();    
-        }
-        if(PlayerPrefs.HasKey("CancelLevelCompleteReward")){
-            PlayerPrefs.DeleteKey("CancelLevelCompleteReward");
-            if(PlayerPrefs.GetInt("InitialMusic") == 1){
-            SettingPopUpController.instance.Unmute_Music();
-            }
-            if(PlayerPrefs.GetInt("InitialSound") == 1){
-            SettingPopUpController.instance.Unmute_Sound();
-            }
         }
     }
 
@@ -130,6 +103,8 @@ public class LevelCompletePopUpController : MonoBehaviour
         DOTween.To(() => endValue - 1f, x => starProgressSlider.value = x, endValue, 0.5f).SetEase(Ease.Linear).OnComplete(() => StartCoroutine(Coin_Anim(0)));
         DOTween.To(() => 0, x => levelProgressSlider.value = x, level , 0.5f).SetEase(Ease.Linear).OnComplete(() => StartCoroutine(Coin_Anim(1)));
         GameData.LevelNo++;
+        GeneralDataManager.Save_Data();
+        StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData)));
     }
     bool LevelUnlocked;
     int amount = 0;
@@ -183,8 +158,12 @@ public class LevelCompletePopUpController : MonoBehaviour
     public void On_Free_Coin_Btn_Click()
     {
         GameManager.Play_Button_Click_Sound();
-        GlanceAds.RewardedAdsAnalytics("LevelCompleteReward","CancelLevelCompleteReward");
-        GlanceAds.RewardedAd("DoubleCoin");
+         if(PlayerPrefs.GetFloat("RumbleBalance") >= 200){
+            StartCoroutine(RumbleSDK.instance.UpdateBalanceAsync(200,"DoubleCoinRewardAd"));
+        }
+        else{
+            RumbleSDK.instance.OnIAPButton();
+        }
         //AdsManager.inst.LoadAndShow_RewardVideo("LevelComplete");
     }
 
@@ -203,14 +182,14 @@ public class LevelCompletePopUpController : MonoBehaviour
     }
 
     private void Home_Btn_Click()
-    {   GlanceAds.EndAnalytics(GeneralDataManager.GameData.LevelNo);
+    {   
         GeneralRefrencesManager.Inst.Clear_Level();
         GameManager.Inst.Show_Screen(GameManager.Screens.HomeScreen);
         CloseThisPopup();
     }
 
     public void On_Next_Btn_Click()
-    {   GlanceAds.LevelAnalytics(GameData.LevelNo);
+    {   
         GameManager.Play_Button_Click_Sound();
         Next_Btn_Click();
     }

@@ -37,7 +37,7 @@ public class GridManager : SingletonComponent<GridManager>
     {
         GeneralRefrencesManager.Inst.World_No_Click_Panel_On_Off(true);
 
-        if (GeneralDataManager.GameData.LevelNo > 14)
+        if (GeneralDataManager.GameData.LevelNo == 15)
         {
             GamePlayUIController.Inst.hintLock.SetActive(false);
             GamePlayUIController.Inst.undoLock.SetActive(false);
@@ -54,7 +54,7 @@ public class GridManager : SingletonComponent<GridManager>
             GamePlayUIController.Inst.freezUnLock.SetActive(true);
 
         }
-        else if (GeneralDataManager.GameData.LevelNo > 9)
+        else if (GeneralDataManager.GameData.LevelNo == 10)
         {
             GamePlayUIController.Inst.hintLock.SetActive(false);
             GamePlayUIController.Inst.undoLock.SetActive(false);
@@ -65,13 +65,12 @@ public class GridManager : SingletonComponent<GridManager>
                 PowerUnlockManager.instance.showMessage(2);
                 PlayerPrefs.SetInt("Swap", 1);
             }
-
             GamePlayUIController.Inst.hintUnLock.SetActive(true);
             GamePlayUIController.Inst.undoUnLock.SetActive(true);
             GamePlayUIController.Inst.swapUnLock.SetActive(true);
             GamePlayUIController.Inst.freezUnLock.SetActive(false);
         }
-        else if (GeneralDataManager.GameData.LevelNo > 4)
+        else if (GeneralDataManager.GameData.LevelNo == 5)
         {
             GamePlayUIController.Inst.hintLock.SetActive(false);
             GamePlayUIController.Inst.undoLock.SetActive(false);
@@ -82,16 +81,15 @@ public class GridManager : SingletonComponent<GridManager>
                 PowerUnlockManager.instance.showMessage(1);
                 PlayerPrefs.SetInt("Undo", 1);
             }
-
             GamePlayUIController.Inst.hintUnLock.SetActive(true);
             GamePlayUIController.Inst.undoUnLock.SetActive(true);
             GamePlayUIController.Inst.swapUnLock.SetActive(false);
             GamePlayUIController.Inst.freezUnLock.SetActive(false);
         }
-        else if (GeneralDataManager.GameData.LevelNo > 1)
+        else if (GeneralDataManager.GameData.LevelNo == 2)
         {
-            GamePlayUIController.Inst.hintLock.SetActive(false);//Show message here
-            if(!PlayerPrefs.HasKey("Hint"))
+            GamePlayUIController.Inst.hintLock.SetActive(false);
+            if (!PlayerPrefs.HasKey("Hint"))
             {
                 PowerUnlockManager.instance.showMessage(0);
                 PlayerPrefs.SetInt("Hint", 1);
@@ -99,7 +97,6 @@ public class GridManager : SingletonComponent<GridManager>
             GamePlayUIController.Inst.undoLock.SetActive(true);
             GamePlayUIController.Inst.swapLock.SetActive(true);
             GamePlayUIController.Inst.freezLock.SetActive(true);
-
             GamePlayUIController.Inst.hintUnLock.SetActive(true);
             GamePlayUIController.Inst.undoUnLock.SetActive(false);
             GamePlayUIController.Inst.swapUnLock.SetActive(false);
@@ -111,7 +108,6 @@ public class GridManager : SingletonComponent<GridManager>
             GamePlayUIController.Inst.undoLock.SetActive(true);
             GamePlayUIController.Inst.swapLock.SetActive(true);
             GamePlayUIController.Inst.freezLock.SetActive(true);
-
             GamePlayUIController.Inst.hintUnLock.SetActive(false);
             GamePlayUIController.Inst.undoUnLock.SetActive(false);
             GamePlayUIController.Inst.swapUnLock.SetActive(false);

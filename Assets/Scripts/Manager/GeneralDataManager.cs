@@ -3,12 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using Newtonsoft.Json;
 
 public class GeneralDataManager : SingletonComponent<GeneralDataManager>
 {
     internal string AndroidShareLink = "https://play.google.com/store/apps/details?id=";
 
     public static Game_Data GameData = new Game_Data();
+
+    public static GeneralDataManager instance;
 
     private const string GameDataSaveKey = "game_Data";
 
@@ -53,26 +56,26 @@ public class GeneralDataManager : SingletonComponent<GeneralDataManager>
 
 
     protected override void Awake()
-    {
+    {   Debug.Log("dsd");
         WillOpenElement =
           JsonConvert.DeserializeObject<Dictionary<int, List<string>>>(Resources.Load("Data/OpenElementData")
               .ToString());
 
         AndroidShareLink = "https://play.google.com/store/apps/details?id=" + Application.identifier;
 
-        if (PlayerPrefs.HasKey(GameDataSaveKey))
-        {
-            Load_Data();
-        }
-        else
-        {
-            for (int i = 0; i < 18; i++)
-            {
-                GameData.OpenElementsIndex.Add(i);
-            }
-            GameData.NewElementOpenCount++;
+        // if (PlayerPrefs.HasKey("game_Data"))
+        // {
+        //     //Load_Data();
+        // }
+        // else
+        // {
+        //     for (int i = 0; i < 18; i++)
+        //     {
+        //         GameData.OpenElementsIndex.Add(i);
+        //     }
+        //     GameData.NewElementOpenCount++;
 
-        }
+        // }
 
         if (testMode)
         {
@@ -99,13 +102,14 @@ public class GeneralDataManager : SingletonComponent<GeneralDataManager>
 
     public static void Save_Data()
     {
-        PlayerPrefs.SetString(GameDataSaveKey, JsonConvert.SerializeObject(GameData));
+        PlayerPrefs.SetString("game_Data", JsonConvert.SerializeObject(GameData));
+        PlayerPrefs.Save();
     }
 
-    private static void Load_Data()
-    {
-        GameData = JsonConvert.DeserializeObject<Game_Data>(PlayerPrefs.GetString(GameDataSaveKey));
-    }
+    // private static void Load_Data()
+    // {
+    //     GameData = JsonConvert.DeserializeObject<Game_Data>(PlayerPrefs.GetString(GameDataSaveKey));
+    // }
 
     public class Game_Data
     {
