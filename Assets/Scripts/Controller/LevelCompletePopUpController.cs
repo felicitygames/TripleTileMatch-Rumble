@@ -172,6 +172,8 @@ public class LevelCompletePopUpController : MonoBehaviour
         doubleRewardBtn.SetActive(false);
         bg.sizeDelta = new Vector2(bg.sizeDelta.x, 1050);
         StartCoroutine(GameManager.Give_Coin_With_Anim(100, transform, 0, Set_Text, coinrefPos));
+        GeneralDataManager.Save_Data();
+        StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData)));
     }
 
 

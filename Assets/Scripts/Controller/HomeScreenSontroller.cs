@@ -107,8 +107,8 @@ public class HomeScreenSontroller : SingletonComponent<HomeScreenSontroller>
 
     public void On_Star_Chest_Btn_Click()
     {
-        Play_Button_Click_Sound();
         if (starChestText.text.Split('/')[0] != starChestText.text.Split('/')[1]) return;
+        Play_Button_Click_Sound();
         GameManager.Inst.Show_Popup(Popups.StarChestPopUp);
     }
 

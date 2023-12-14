@@ -31,6 +31,10 @@ public class GamePlayUIController : SingletonComponent<GamePlayUIController>, IP
             lvlText.font = lvlfont;
             lvlText.resizeTextForBestFit = true;
         }
+            PowerUnlockManager.instance.hands[3].SetActive(false);
+            PowerUnlockManager.instance.hands[2].SetActive(false);
+            PowerUnlockManager.instance.hands[1].SetActive(false);
+            PowerUnlockManager.instance.hands[0].SetActive(false);
         if (PlayerPrefs.HasKey("Hint") && PlayerPrefs.HasKey("Undo") && PlayerPrefs.HasKey("Swap") && PlayerPrefs.HasKey("Freeze")){
             PowerUnlockManager.instance.hands[3].SetActive(true);
             PowerUnlockManager.instance.hands[2].SetActive(false);
