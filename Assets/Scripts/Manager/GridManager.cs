@@ -37,16 +37,22 @@ public class GridManager : SingletonComponent<GridManager>
     {
         GeneralRefrencesManager.Inst.World_No_Click_Panel_On_Off(true);
 
-        if (GeneralDataManager.GameData.LevelNo == 15)
+        if (GeneralDataManager.GameData.LevelNo >= 15)
         {
             GamePlayUIController.Inst.hintLock.SetActive(false);
             GamePlayUIController.Inst.undoLock.SetActive(false);
             GamePlayUIController.Inst.swapLock.SetActive(false);
             GamePlayUIController.Inst.freezLock.SetActive(false);
-            if (!PlayerPrefs.HasKey("Freeze"))
-            {
-                PowerUnlockManager.instance.showMessage(3);
-                PlayerPrefs.SetInt("Freeze", 1);
+            if (GeneralDataManager.GameData.LevelNo == 15){
+                if (!PlayerPrefs.HasKey("Freeze"))
+                {
+                    PowerUnlockManager.instance.showMessage(3);
+                    PlayerPrefs.SetInt("Freeze", 1);
+                    PlayerPrefs.SetInt("Swap", 1);
+                    PlayerPrefs.SetInt("Undo", 1);
+                    PlayerPrefs.SetInt("Hint", 1);
+                    PlayerPrefs.Save();
+                }
             }
             GamePlayUIController.Inst.hintUnLock.SetActive(true);
             GamePlayUIController.Inst.undoUnLock.SetActive(true);
@@ -54,45 +60,57 @@ public class GridManager : SingletonComponent<GridManager>
             GamePlayUIController.Inst.freezUnLock.SetActive(true);
 
         }
-        else if (GeneralDataManager.GameData.LevelNo == 10)
+        else if (GeneralDataManager.GameData.LevelNo >= 10)
         {
             GamePlayUIController.Inst.hintLock.SetActive(false);
             GamePlayUIController.Inst.undoLock.SetActive(false);
             GamePlayUIController.Inst.swapLock.SetActive(false);
             GamePlayUIController.Inst.freezLock.SetActive(true);
-            if (!PlayerPrefs.HasKey("Swap"))
-            {
-                PowerUnlockManager.instance.showMessage(2);
-                PlayerPrefs.SetInt("Swap", 1);
+            if (GeneralDataManager.GameData.LevelNo == 10){
+                if (!PlayerPrefs.HasKey("Swap"))
+                {
+                    PowerUnlockManager.instance.showMessage(2);
+                    PlayerPrefs.SetInt("Swap", 1);
+                    PlayerPrefs.SetInt("Undo", 1);
+                    PlayerPrefs.SetInt("Hint", 1);
+                    PlayerPrefs.Save();
+                }
             }
             GamePlayUIController.Inst.hintUnLock.SetActive(true);
             GamePlayUIController.Inst.undoUnLock.SetActive(true);
             GamePlayUIController.Inst.swapUnLock.SetActive(true);
             GamePlayUIController.Inst.freezUnLock.SetActive(false);
         }
-        else if (GeneralDataManager.GameData.LevelNo == 5)
+        else if (GeneralDataManager.GameData.LevelNo >= 5)
         {
             GamePlayUIController.Inst.hintLock.SetActive(false);
             GamePlayUIController.Inst.undoLock.SetActive(false);
             GamePlayUIController.Inst.swapLock.SetActive(true);
             GamePlayUIController.Inst.freezLock.SetActive(true);
-            if (!PlayerPrefs.HasKey("Undo"))
-            {
-                PowerUnlockManager.instance.showMessage(1);
-                PlayerPrefs.SetInt("Undo", 1);
+            if(GeneralDataManager.GameData.LevelNo == 5){
+                if (!PlayerPrefs.HasKey("Undo"))
+                {
+                    PowerUnlockManager.instance.showMessage(1);
+                    PlayerPrefs.SetInt("Undo", 1);
+                    PlayerPrefs.SetInt("Hint", 1);
+                    PlayerPrefs.Save();
+                }
             }
             GamePlayUIController.Inst.hintUnLock.SetActive(true);
             GamePlayUIController.Inst.undoUnLock.SetActive(true);
             GamePlayUIController.Inst.swapUnLock.SetActive(false);
             GamePlayUIController.Inst.freezUnLock.SetActive(false);
         }
-        else if (GeneralDataManager.GameData.LevelNo == 2)
+        else if (GeneralDataManager.GameData.LevelNo >= 2)
         {
             GamePlayUIController.Inst.hintLock.SetActive(false);
-            if (!PlayerPrefs.HasKey("Hint"))
-            {
-                PowerUnlockManager.instance.showMessage(0);
-                PlayerPrefs.SetInt("Hint", 1);
+            if(GeneralDataManager.GameData.LevelNo == 2){
+                if (!PlayerPrefs.HasKey("Hint"))
+                {
+                    PowerUnlockManager.instance.showMessage(0);
+                    PlayerPrefs.SetInt("Hint", 1);
+                    PlayerPrefs.Save();
+                }
             }
             GamePlayUIController.Inst.undoLock.SetActive(true);
             GamePlayUIController.Inst.swapLock.SetActive(true);

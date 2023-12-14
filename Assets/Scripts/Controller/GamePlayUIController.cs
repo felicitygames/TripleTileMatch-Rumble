@@ -31,6 +31,44 @@ public class GamePlayUIController : SingletonComponent<GamePlayUIController>, IP
             lvlText.font = lvlfont;
             lvlText.resizeTextForBestFit = true;
         }
+        if (PlayerPrefs.HasKey("Hint") && PlayerPrefs.HasKey("Undo") && PlayerPrefs.HasKey("Swap") && PlayerPrefs.HasKey("Freeze")){
+            PowerUnlockManager.instance.hands[3].SetActive(true);
+            PowerUnlockManager.instance.hands[2].SetActive(false);
+            PowerUnlockManager.instance.hands[1].SetActive(false);
+            PowerUnlockManager.instance.hands[0].SetActive(false);
+        }
+
+        if (PlayerPrefs.HasKey("Hint") && PlayerPrefs.HasKey("Undo") && PlayerPrefs.HasKey("Swap") && !PlayerPrefs.HasKey("Freeze")){
+            PowerUnlockManager.instance.hands[3].SetActive(false);
+            PowerUnlockManager.instance.hands[2].SetActive(true);
+            PowerUnlockManager.instance.hands[1].SetActive(false);
+            PowerUnlockManager.instance.hands[0].SetActive(false);
+        }
+
+        if (PlayerPrefs.HasKey("Hint") && PlayerPrefs.HasKey("Undo") && !PlayerPrefs.HasKey("Swap") && !PlayerPrefs.HasKey("Freeze")){
+            PowerUnlockManager.instance.hands[3].SetActive(false);
+            PowerUnlockManager.instance.hands[2].SetActive(false);
+            PowerUnlockManager.instance.hands[1].SetActive(true);
+            PowerUnlockManager.instance.hands[0].SetActive(false);
+        }
+
+        if (PlayerPrefs.HasKey("Hint") && !PlayerPrefs.HasKey("Undo") && !PlayerPrefs.HasKey("Swap") && !PlayerPrefs.HasKey("Freeze")){
+            PowerUnlockManager.instance.hands[3].SetActive(false);
+            PowerUnlockManager.instance.hands[2].SetActive(false);
+            PowerUnlockManager.instance.hands[1].SetActive(false);
+            PowerUnlockManager.instance.hands[0].SetActive(true);
+        }
+
+        Invoke("DisableHandGesture",3.0f);
+
+
+    }
+
+    public void DisableHandGesture() {
+        PowerUnlockManager.instance.hands[3].SetActive(false);
+        PowerUnlockManager.instance.hands[2].SetActive(false);
+        PowerUnlockManager.instance.hands[1].SetActive(false);
+        PowerUnlockManager.instance.hands[0].SetActive(false);
     }
 
     internal void Set_Text()
@@ -90,6 +128,7 @@ public class GamePlayUIController : SingletonComponent<GamePlayUIController>, IP
         PowerUnlockManager.instance.animators[0].enabled = false;
         PowerUnlockManager.instance.animators[0].gameObject.transform.localScale = Vector3.one;
         PowerUnlockManager.instance.PowerUnlockPanel.SetActive(false);
+        PowerUnlockManager.instance.IconUnlockPanel.SetActive(false);
         PowerUnlockManager.instance.hands[0].SetActive(false);
         if (GRMI.elementParent.childCount == 0 || !GRMI.IsDestroyComplete)
             return;
@@ -270,6 +309,7 @@ public class GamePlayUIController : SingletonComponent<GamePlayUIController>, IP
         PowerUnlockManager.instance.animators[1].enabled = false;
         PowerUnlockManager.instance.animators[1].gameObject.transform.localScale = Vector3.one;
         PowerUnlockManager.instance.PowerUnlockPanel.SetActive(false);
+        PowerUnlockManager.instance.IconUnlockPanel.SetActive(false);
         PowerUnlockManager.instance.hands[1].SetActive(false);
         if (GRMI.Get_Element_Collector_Child_Count() == 0)
             return;
@@ -354,6 +394,7 @@ public class GamePlayUIController : SingletonComponent<GamePlayUIController>, IP
         PowerUnlockManager.instance.animators[2].enabled = false;
         PowerUnlockManager.instance.animators[2].gameObject.transform.localScale = Vector3.one;
         PowerUnlockManager.instance.PowerUnlockPanel.SetActive(false);
+        PowerUnlockManager.instance.IconUnlockPanel.SetActive(false);
         PowerUnlockManager.instance.hands[2].SetActive(false);
         if (isSwapping || GRMI.elementParent.childCount < 1) return;
         isSwapping = true;
@@ -406,6 +447,7 @@ public class GamePlayUIController : SingletonComponent<GamePlayUIController>, IP
         PowerUnlockManager.instance.animators[3].enabled = false;
         PowerUnlockManager.instance.animators[3].gameObject.transform.localScale = Vector3.one;
         PowerUnlockManager.instance.PowerUnlockPanel.SetActive(false);
+        PowerUnlockManager.instance.IconUnlockPanel.SetActive(false);
         PowerUnlockManager.instance.hands[3].SetActive(false);
         GameManager.Play_Button_Click_Sound();
         Freeze_Effect(true);

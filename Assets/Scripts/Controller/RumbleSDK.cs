@@ -320,7 +320,7 @@ public class RumbleSDK : MonoBehaviour
 
 	// Update Balance
 	public IEnumerator UpdateBalanceAsync(int amount,string spent_on1)
-	{
+	{	
     	PlayerPrefs.SetString("RewardType",spent_on1);
     	string url = FetchApiUrl() + "api/v1/transaction/game-developer/user-balance";
 
@@ -357,7 +357,7 @@ public class RumbleSDK : MonoBehaviour
     	yield return request.SendWebRequest();
 
     	if (request.result == UnityWebRequest.Result.Success)
-    	{
+    	{	
         	if(PlayerPrefs.GetString("RewardType") == "IncreaseCoinRewardAd"){
                 	PlayerPrefs.DeleteKey("RewardType");
 					PlayerPrefs.SetInt("IncreaseCoinReward",1);
@@ -384,7 +384,7 @@ public class RumbleSDK : MonoBehaviour
             }  
 			else if(PlayerPrefs.GetString("RewardType") == "StarChestRewardAd"){
             	PlayerPrefs.DeleteKey("RewardType");
-				PlayerPrefs.SetInt("StarChestRewardAd",1);
+				PlayerPrefs.SetInt("StarChestReward",1);
             }    	
         	//Debug.Log("Balance updated successfully");
         	StartCoroutine(GetRumbleBalanceAsync());

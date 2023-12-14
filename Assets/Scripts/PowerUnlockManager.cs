@@ -42,6 +42,9 @@ public class PowerUnlockManager : MonoBehaviour
         name.text = names[index];
         PowerUnlockPanel.SetActive(true);
         IconUnlockPanel.SetActive(true);
+        for(int i = 0; i < index;i++){
+            hands[i].SetActive(false);
+        }
         hands[index].SetActive(true);
         yield return new WaitForSeconds(5);
         animators[index].enabled = false;

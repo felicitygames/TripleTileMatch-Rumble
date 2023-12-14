@@ -56,7 +56,7 @@ public class GeneralDataManager : SingletonComponent<GeneralDataManager>
 
 
     protected override void Awake()
-    {   Debug.Log("dsd");
+    {   
         WillOpenElement =
           JsonConvert.DeserializeObject<Dictionary<int, List<string>>>(Resources.Load("Data/OpenElementData")
               .ToString());

@@ -159,7 +159,7 @@ public class LevelCompletePopUpController : MonoBehaviour
     {
         GameManager.Play_Button_Click_Sound();
          if(PlayerPrefs.GetFloat("RumbleBalance") >= 200){
-            StartCoroutine(RumbleSDK.instance.UpdateBalanceAsync(200,"DoubleCoinRewardAd"));
+            StartCoroutine(RumbleSDK.instance.UpdateBalanceAsync(200,"LevelCompleteRewardAd"));
         }
         else{
             RumbleSDK.instance.OnIAPButton();
