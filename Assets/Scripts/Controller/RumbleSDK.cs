@@ -313,7 +313,7 @@ public class RumbleSDK : MonoBehaviour
     	else
     	{
         	string data = request.downloadHandler.text;
-        	////Debug.Log("Data"+data);
+        	//Debug.Log("Data"+data);
         	Debug.LogError($"Error: {request.responseCode} - {request.error}");
     	}
 	}
@@ -454,21 +454,57 @@ public class RumbleSDK : MonoBehaviour
 	public void OnRewardAdButton()
 	{	
     	StartCoroutine(PushSocketAsync("RV"));
+		PlayerPrefs.SetInt("InitialMusic",PlayerPrefs.GetInt("Music"));
+        PlayerPrefs.SetInt("InitialSound",PlayerPrefs.GetInt("Sound"));
+        SoundManager.Inst.IsMusicOn = false;
+        SoundManager.Inst.IsSoundEffectsOn = false;
+        if (SoundManager.Inst.IsMusicOn)
+            SoundManager.Inst.Play("bg_sound", true);
+        else
+            SoundManager.Inst.Stop("bg_sound");
 	}
 	public void OnIAPButton()
 	{    
     	StartCoroutine(PushSocketAsync("IAP"));
 	}
+	public void OnIAPNewButton()
+	{    
+    	StartCoroutine(PushSocketAsync("IAP_PACKAGE"));
+		PlayerPrefs.SetInt("InitialMusic",PlayerPrefs.GetInt("Music"));
+        PlayerPrefs.SetInt("InitialSound",PlayerPrefs.GetInt("Sound"));
+        SoundManager.Inst.IsMusicOn = false;
+        SoundManager.Inst.IsSoundEffectsOn = false;
+        if (SoundManager.Inst.IsMusicOn)
+            SoundManager.Inst.Play("bg_sound", true);
+        else
+            SoundManager.Inst.Stop("bg_sound");
+	}
+
+	public void OnResumeGame()
+	{    StartCoroutine(GetRumbleBalanceAsync());
+		if(PlayerPrefs.GetInt("InitialMusic") == 1){
+            SoundManager.Inst.IsMusicOn = true;
+			if (SoundManager.Inst.IsMusicOn)
+				SoundManager.Inst.Play("bg_sound", true);
+			else
+				SoundManager.Inst.Stop("bg_sound");
+			}
+		if(PlayerPrefs.GetInt("InitialSound") == 1){
+			SoundManager.Inst.IsSoundEffectsOn = true;
+		}
+	}
 	// Push Socket - To watch rewarded ad or let users buy rumbles
 	IEnumerator PushSocketAsync(string type)
 	{
     	string url = FetchApiUrl() + "api/v1/transaction/game-developer/push-socket";
-    	string body = JsonConvert.SerializeObject(new { sessionId = session_id, type });
+		string body = JsonConvert.SerializeObject(new { sessionId = session_id, type });
+		if(type == "IAP_PACKAGE")
+    	body = JsonConvert.SerializeObject(new { sessionId = session_id, type, packageId = 1, purchaseTransactionId = MakeUniqueId(10)});
     	long timeStamp = DateTimeOffset.Now.ToUnixTimeSeconds();
     	string new_body = body + "|" + timeStamp;
     	string encrypted_body = Convert.ToBase64String(Encoding.UTF8.GetBytes(new_body));
-    	Debug.Log("push>" + body);
-    	Debug.Log("push>" + encrypted_body);
+    	// Debug.Log("push>" + body);
+    	// Debug.Log("push>" + encrypted_body);
     	using (var www = new UnityWebRequest(url, "POST"))
     	{
         	www.SetRequestHeader("accept", "*/*");
@@ -483,11 +519,11 @@ public class RumbleSDK : MonoBehaviour
 
         	if (www.result == UnityWebRequest.Result.Success)
         	{
-            	//Debug.Log("PushSocket success");
+            	Debug.Log("PushSocket success");
         	}
         	else
         	{
-            	//Debug.Log($"PushSocket failed: {www.error}");
+            	Debug.Log($"PushSocket failed: {www.error}");
         	}
     	}
 	}
