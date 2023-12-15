@@ -467,8 +467,8 @@ public class RumbleSDK : MonoBehaviour
     	long timeStamp = DateTimeOffset.Now.ToUnixTimeSeconds();
     	string new_body = body + "|" + timeStamp;
     	string encrypted_body = Convert.ToBase64String(Encoding.UTF8.GetBytes(new_body));
-    	//Debug.Log("push>" + body);
-    	//Debug.Log("push>" + encrypted_body);
+    	Debug.Log("push>" + body);
+    	Debug.Log("push>" + encrypted_body);
     	using (var www = new UnityWebRequest(url, "POST"))
     	{
         	www.SetRequestHeader("accept", "*/*");

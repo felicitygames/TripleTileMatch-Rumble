@@ -1678,7 +1678,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 171, y: -12}
-  m_SizeDelta: {x: 101.659546, y: 70}
+  m_SizeDelta: {x: 107.25309, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &319365783
 MonoBehaviour:
@@ -2600,7 +2600,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3366920125771075364, guid: 4b6843730d7039f48a3df4c5680c49f7, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 62.307465
+      value: 64.35185
       objectReference: {fileID: 0}
     - target: {fileID: 3366920125771075364, guid: 4b6843730d7039f48a3df4c5680c49f7, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -2620,7 +2620,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3366920125852359505, guid: 4b6843730d7039f48a3df4c5680c49f7, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 68.86614
+      value: 64.35185
       objectReference: {fileID: 0}
     - target: {fileID: 3366920126017650125, guid: 4b6843730d7039f48a3df4c5680c49f7, type: 3}
       propertyPath: levelChest
@@ -2776,7 +2776,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3366920127542816017, guid: 4b6843730d7039f48a3df4c5680c49f7, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 22.955381
+      value: 21.450619
       objectReference: {fileID: 0}
     - target: {fileID: 3366920127823588509, guid: 4b6843730d7039f48a3df4c5680c49f7, type: 3}
       propertyPath: m_CullTransparentMesh
@@ -9185,7 +9185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 285ff7ba2e8b76140b4e79e0a3e57ad5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameURL: http://localhost:8000?roomDetails=eyJyb29tSWQiOiI1NTY5XzExMTAiLCJtYXhQbGF5ZXJzIjoyMCwibWluUGxheWVycyI6MTAsIm1heFdhaXQiOjEwLCJyb3VuZHMiOjEwLCJ0ZXh0IjoicGxheV9hZ2FpbiIsImFsbG93Qm90cyI6dHJ1ZSwidXNlciI6eyJuYW1lIjoiNzYwWFhYWDc3NCIsInBob3RvIjoiaHR0cHM6Ly9hc3NldHMtZGV2LnJ1bWJsZWFwcC5nZy9hdmF0YXJzX21hc3Rlci9hdmF0YXJfMS5wbmciLCJzdWIiOiIyMTAifX0=&session_id=863cbe2e-ee0d-415c-9893-5014abaed930&env=dev&source=cutysvcv167t63t4&gamingEnv=development
+  gameURL: localhost:8000?roomDetails=eyJyb29tSWQiOiI1NTA5XzEwOTYiLCJtYXhQbGF5ZXJzIjoyMCwibWluUGxheWVycyI6MTAsIm1heFdhaXQiOjEwLCJyb3VuZHMiOjEwLCJ0ZXh0IjoicGxheV9hZ2FpbiIsImFsbG93Qm90cyI6dHJ1ZSwidXNlciI6eyJuYW1lIjoiU2hydXRoaWs4IiwicGhvdG8iOiJodHRwczovL2Fzc2V0cy1kZXYucnVtYmxlYXBwLmdnL3VzZXItYXZhdGFyLzE4NS8xNjYyMzU5NjU1OTEzLWZfMTY2MjM1OTY1NzAyNS5qcGVnIiwic3ViIjoiMTg1In19&session_id=d89f4fe1-1d95-4e3c-9bdd-dd801729adfa&env=dev&source=cutysvcv167t63t4&gamingEnv=development
   startTime: 0
   _postData:
     session_id: 
@@ -11111,7 +11111,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 124.2, y: 3.4}
-  m_SizeDelta: {x: 45.910763, y: 70}
+  m_SizeDelta: {x: 45.58256, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1285113953
 MonoBehaviour:
@@ -12686,7 +12686,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 208.20003, y: 16.200012}
-  m_SizeDelta: {x: 55.748783, y: 70}
+  m_SizeDelta: {x: 56.307873, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1669676788
 MonoBehaviour:
@@ -13304,7 +13304,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 170.99997, y: 23.00006}
-  m_SizeDelta: {x: 88.54218, y: 70}
+  m_SizeDelta: {x: 96.52778, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1707085448
 MonoBehaviour:
