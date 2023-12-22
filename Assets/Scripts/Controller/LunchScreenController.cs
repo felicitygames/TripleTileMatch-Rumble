@@ -7,6 +7,8 @@ public class LunchScreenController : SingletonComponent<LunchScreenController>
 {
     public void Complete()
     {   
+        PlayerPrefs.DeleteKey("UnlockedAllLevels");
+        PlayerPrefs.DeleteKey("LevelsUnlocked");
         GameManager.Inst.Show_Screen(GameManager.Screens.HomeScreen);
     }
     public void CloseThisScreen()

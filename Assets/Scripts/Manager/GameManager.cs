@@ -22,6 +22,7 @@ public class GameManager : SingletonComponent<GameManager>
     [Header("Screen Reference")] public GameObject gamePlay;
     public GameObject homeScreen;
     public GameObject lunchScreen;
+    public GameObject levelUnlock;
 
     [Header("PopUp Reference")] public GameObject gameOver;
     public GameObject levelComplete;

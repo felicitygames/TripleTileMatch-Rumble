@@ -34,7 +34,7 @@ public class StarChestOpenPopUpController : MonoBehaviour
 
         GameManager.Play_Button_Click_Sound();
         GameManager.Increase_Coin(amount);
-         StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData)));
+         StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData),PlayerPrefs.GetInt("LevelsUnlocked",1),PlayerPrefs.GetInt("UnlockedAllLevels",1)));
         adBtn.SetActive(true);
         closeBtn.SetActive(true);
         GetComponent<Animator>().SetTrigger("Play");
@@ -64,7 +64,7 @@ public class StarChestOpenPopUpController : MonoBehaviour
     public void Give_Reward()
     {
         GameManager.Increase_Coin(amount);
-        StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData)));
+        StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData),PlayerPrefs.GetInt("LevelsUnlocked",1),PlayerPrefs.GetInt("UnlockedAllLevels",1)));
         GeneralRefrencesManager.Inst.No_Click_Panel_On_Off(true);
         StartCoroutine(GameManager.Give_Coin_With_Anim(0, chestIcon, 0, CloseThisPopup, HomeScreenSontroller.Inst.coinRef));
     }

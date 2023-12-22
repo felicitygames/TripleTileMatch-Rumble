@@ -102,9 +102,14 @@ public class LevelCompletePopUpController : MonoBehaviour
         SoundManager.Inst.Play("slider_fill");
         DOTween.To(() => endValue - 1f, x => starProgressSlider.value = x, endValue, 0.5f).SetEase(Ease.Linear).OnComplete(() => StartCoroutine(Coin_Anim(0)));
         DOTween.To(() => 0, x => levelProgressSlider.value = x, level , 0.5f).SetEase(Ease.Linear).OnComplete(() => StartCoroutine(Coin_Anim(1)));
+        if(GameData.LevelNo >= 10){
+            if(GameData.LevelNo % 10 == 0){
+                PlayerPrefs.SetInt("LevelsUnlocked",1);
+            }
+        }
         GameData.LevelNo++;
         GeneralDataManager.Save_Data();
-        StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData)));
+        StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData),PlayerPrefs.GetInt("LevelsUnlocked",1),PlayerPrefs.GetInt("UnlockedAllLevels",1)));
     }
     bool LevelUnlocked;
     int amount = 0;
@@ -173,7 +178,7 @@ public class LevelCompletePopUpController : MonoBehaviour
         bg.sizeDelta = new Vector2(bg.sizeDelta.x, 1050);
         StartCoroutine(GameManager.Give_Coin_With_Anim(100, transform, 0, Set_Text, coinrefPos));
         GeneralDataManager.Save_Data();
-        StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData)));
+        StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData),PlayerPrefs.GetInt("LevelsUnlocked",1),PlayerPrefs.GetInt("UnlockedAllLevels",1)));
     }
 
 
@@ -198,10 +203,28 @@ public class LevelCompletePopUpController : MonoBehaviour
 
     private void Next_Btn_Click()
     {
-        GeneralRefrencesManager.Inst.Clear_Level();
-        GridManager.Inst.Generate_Grid(GameData.LevelNo);
-        CloseThisPopup();
-        
+        if(GameData.LevelNo > 10){
+            if(PlayerPrefs.GetInt("UnlockedAllLevels") == 1){
+                if(PlayerPrefs.GetInt("LevelsUnlocked") == 1){
+                    GameManager.Inst.levelUnlock.SetActive(true);
+                }
+                else{
+                    GeneralRefrencesManager.Inst.Clear_Level();
+                    GridManager.Inst.Generate_Grid(GameData.LevelNo);
+                    CloseThisPopup();
+                }
+            }
+            else{
+                GeneralRefrencesManager.Inst.Clear_Level();
+                GridManager.Inst.Generate_Grid(GameData.LevelNo);
+                CloseThisPopup();
+            }
+        }
+        else{
+            GeneralRefrencesManager.Inst.Clear_Level();
+            GridManager.Inst.Generate_Grid(GameData.LevelNo);
+            CloseThisPopup();
+        }
     }
 
     public void CloseThisPopup()

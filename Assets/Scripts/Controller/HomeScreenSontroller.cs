@@ -22,6 +22,9 @@ public class HomeScreenSontroller : SingletonComponent<HomeScreenSontroller>
     public GameObject removeAdsButton;
     public GameObject levelChest;
 
+    void Start(){
+        
+    }
     private void Update()
     {
         if (PlayerPrefs.HasKey("IncreaseCoinReward")){
@@ -70,7 +73,21 @@ public class HomeScreenSontroller : SingletonComponent<HomeScreenSontroller>
     public void On_Play_Btn_Click()
     {
         Play_Button_Click_Sound();
-        GameManager.Inst.Show_Screen(Screens.GameScreen);
+        if(GameData.LevelNo > 10){
+            if(PlayerPrefs.GetInt("UnlockedAllLevels") == 1){
+                if(PlayerPrefs.GetInt("LevelsUnlocked") == 1){
+                    GameManager.Inst.levelUnlock.SetActive(true);
+                }
+                else{
+                    GameManager.Inst.Show_Screen(Screens.GameScreen);
+                }
+            }else{
+                GameManager.Inst.Show_Screen(Screens.GameScreen);
+            }    
+        }
+        else{
+            GameManager.Inst.Show_Screen(Screens.GameScreen);
+        }
     }
 
     public void On_Remove_Ad_Btn_Click()
@@ -96,7 +113,7 @@ public class HomeScreenSontroller : SingletonComponent<HomeScreenSontroller>
     public void AfterIncreaseAds(){
         Increase_Coin(150);
         GeneralDataManager.Save_Data();
-        StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData)));
+        StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData),PlayerPrefs.GetInt("LevelsUnlocked",1),PlayerPrefs.GetInt("UnlockedAllLevels",1)));
         Set_Coin_Diamond_Level_Text();
     }
 

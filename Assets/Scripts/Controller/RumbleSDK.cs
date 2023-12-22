@@ -55,6 +55,8 @@ public class ResponseData
 public class Metadata
 {
 	//All the data you have stored which is to be fetched.
+	public int UnlockedAllLevels;
+	public int LevelsUnlocked;
 	public string unique_match_id;
     public string gameData;
 }
@@ -82,6 +84,8 @@ public class Serialization<T>
 public class MyData
 {
 	//All the data to be stored.
+	public int UnlockedAllLevels;
+	public int LevelsUnlocked;
 	public string unique_match_id;
     public string gameData;
 }
@@ -220,10 +224,13 @@ public class RumbleSDK : MonoBehaviour
     	if (www.result != UnityWebRequest.Result.Success)
     	{
         	//Debug.Log($"Error: {www.error}");
-			if (PlayerPrefs.HasKey("game_Data"))
+			for (int i = 0; i < 18; i++)
 			{
-				GeneralDataManager.GameData = JsonConvert.DeserializeObject<GeneralDataManager.Game_Data>(PlayerPrefs.GetString("game_Data"));
+				GeneralDataManager.GameData.OpenElementsIndex.Add(i);
 			}
+				GeneralDataManager.GameData.NewElementOpenCount++;
+				GeneralDataManager.Save_Data();
+				StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData),PlayerPrefs.GetInt("LevelsUnlocked",1),PlayerPrefs.GetInt("UnlockedAllLevels",1)));
 
     	}
     	else
@@ -244,42 +251,29 @@ public class RumbleSDK : MonoBehaviour
                 	{   
               		// Whatever data you stored are available in (fetchData.data.progress_metadata[lastIndex]).For example - you need to fetch the data like this -
 					if(fetchData.data.progress_metadata.Length > 0){
-						if(fetchData.data.progress_metadata[lastIndex].gameData != null)
-						GeneralDataManager.GameData = JsonConvert.DeserializeObject<GeneralDataManager.Game_Data>(fetchData.data.progress_metadata[lastIndex].gameData);
+						if(fetchData.data.progress_metadata[lastIndex].gameData != null){
+							GeneralDataManager.GameData = JsonConvert.DeserializeObject<GeneralDataManager.Game_Data>(fetchData.data.progress_metadata[lastIndex].gameData);
+							PlayerPrefs.SetInt("LevelsUnlocked",fetchData.data.progress_metadata[lastIndex].LevelsUnlocked);
+							PlayerPrefs.SetInt("UnlockedAllLevels",fetchData.data.progress_metadata[lastIndex].UnlockedAllLevels);
+						}
 						else {
-								if (PlayerPrefs.HasKey("game_Data"))
+								for (int i = 0; i < 18; i++)
 								{
-									GeneralDataManager.GameData = JsonConvert.DeserializeObject<GeneralDataManager.Game_Data>(PlayerPrefs.GetString("game_Data"));
+									GeneralDataManager.GameData.OpenElementsIndex.Add(i);
+								}
+									GeneralDataManager.GameData.NewElementOpenCount++;
 									GeneralDataManager.Save_Data();
-									StartCoroutine(SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData)));
-								}
-								else{
-									for (int i = 0; i < 18; i++)
-									{
-										GeneralDataManager.GameData.OpenElementsIndex.Add(i);
-									}
-										GeneralDataManager.GameData.NewElementOpenCount++;
-										GeneralDataManager.Save_Data();
-										StartCoroutine(SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData)));
-								}
+									StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData),PlayerPrefs.GetInt("LevelsUnlocked",1),PlayerPrefs.GetInt("UnlockedAllLevels",1)));
 						}
 					}
 					else {
-						if (PlayerPrefs.HasKey("game_Data"))
-						{
-							GeneralDataManager.GameData = JsonConvert.DeserializeObject<GeneralDataManager.Game_Data>(PlayerPrefs.GetString("game_Data"));
-							GeneralDataManager.Save_Data();
-							StartCoroutine(SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData)));
-						}
-						else{
 							for (int i = 0; i < 18; i++)
 							{
 								GeneralDataManager.GameData.OpenElementsIndex.Add(i);
 							}
 								GeneralDataManager.GameData.NewElementOpenCount++;
 								GeneralDataManager.Save_Data();
-								StartCoroutine(SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData)));
-						}
+								StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData),PlayerPrefs.GetInt("LevelsUnlocked",1),PlayerPrefs.GetInt("UnlockedAllLevels",1)));
 					}
         			
                           }
@@ -385,7 +379,13 @@ public class RumbleSDK : MonoBehaviour
 			else if(PlayerPrefs.GetString("RewardType") == "StarChestRewardAd"){
             	PlayerPrefs.DeleteKey("RewardType");
 				PlayerPrefs.SetInt("StarChestReward",1);
-            }    	
+            }
+			else if(PlayerPrefs.GetString("RewardType") == "LevelsUnlockedAd"){
+            	PlayerPrefs.DeleteKey("RewardType");
+				PlayerPrefs.SetInt("LevelsUnlocked",0);
+				PlayerPrefs.Save();
+				StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData),PlayerPrefs.GetInt("LevelsUnlocked",1),PlayerPrefs.GetInt("UnlockedAllLevels",1)));
+            }	
         	//Debug.Log("Balance updated successfully");
         	StartCoroutine(GetRumbleBalanceAsync());
     	}
@@ -396,7 +396,7 @@ public class RumbleSDK : MonoBehaviour
     	}
 	}
 
-	public IEnumerator SaveDataCoroutine(string type, string game_data)
+	public IEnumerator SaveDataCoroutine(string type, string game_data,int LevelsUnlocked,int UnlockedAllLevels)
 	{
     	string url = FetchApiUrl() + "api/v1/transaction/game-developer/save-data";
     	string body = "";
@@ -406,6 +406,8 @@ public class RumbleSDK : MonoBehaviour
             	metadata = new MyData
             	{
 					//set your metadata class variable to the parameter you passed. For example-
+					LevelsUnlocked = LevelsUnlocked,
+					UnlockedAllLevels = UnlockedAllLevels,
                 	gameData = game_data,
                 	unique_match_id = MakeUniqueId(10)
             	},
@@ -447,10 +449,25 @@ public class RumbleSDK : MonoBehaviour
         	else
         	{
             	//Debug.Log("Data saved successfully");
+				StartCoroutine(GetDataAsync("PROGRESS"));
         	}
         	//Debug.Log("PURCHASES"+www.result);
     	}
 	}
+
+	public void OnRewardLvlAdButton()
+	{	
+    	StartCoroutine(PushSocketAsync("RV"));
+		PlayerPrefs.SetInt("InitialMusic",PlayerPrefs.GetInt("Music"));
+        PlayerPrefs.SetInt("InitialSound",PlayerPrefs.GetInt("Sound"));
+        SoundManager.Inst.IsMusicOn = false;
+        SoundManager.Inst.IsSoundEffectsOn = false;
+        if (SoundManager.Inst.IsMusicOn)
+            SoundManager.Inst.Play("bg_sound", true);
+        else
+            SoundManager.Inst.Stop("bg_sound");
+	}
+
 	public void OnRewardAdButton()
 	{	
     	StartCoroutine(PushSocketAsync("RV"));
@@ -469,7 +486,19 @@ public class RumbleSDK : MonoBehaviour
 	}
 	public void OnIAPNewButton()
 	{    
-    	StartCoroutine(PushSocketAsync("IAP_PACKAGE"));
+    	StartCoroutine(PushSocketAsync("IAP_PACKAGE",1));
+		PlayerPrefs.SetInt("InitialMusic",PlayerPrefs.GetInt("Music"));
+        PlayerPrefs.SetInt("InitialSound",PlayerPrefs.GetInt("Sound"));
+        SoundManager.Inst.IsMusicOn = false;
+        SoundManager.Inst.IsSoundEffectsOn = false;
+        if (SoundManager.Inst.IsMusicOn)
+            SoundManager.Inst.Play("bg_sound", true);
+        else
+            SoundManager.Inst.Stop("bg_sound");
+	}
+	public void OnIAPUnlockButton()
+	{   PlayerPrefs.SetString("IAPType","UnlockAllLevelsAd"); 
+    	StartCoroutine(PushSocketAsync("IAP_PACKAGE",43));
 		PlayerPrefs.SetInt("InitialMusic",PlayerPrefs.GetInt("Music"));
         PlayerPrefs.SetInt("InitialSound",PlayerPrefs.GetInt("Sound"));
         SoundManager.Inst.IsMusicOn = false;
@@ -481,7 +510,7 @@ public class RumbleSDK : MonoBehaviour
 	}
 
 	public void OnResumeGame()
-	{    StartCoroutine(GetRumbleBalanceAsync());
+	{    //StartCoroutine(GetRumbleBalanceAsync());
 		if(PlayerPrefs.GetInt("InitialMusic") == 1){
             SoundManager.Inst.IsMusicOn = true;
 			if (SoundManager.Inst.IsMusicOn)
@@ -494,12 +523,12 @@ public class RumbleSDK : MonoBehaviour
 		}
 	}
 	// Push Socket - To watch rewarded ad or let users buy rumbles
-	IEnumerator PushSocketAsync(string type)
+	IEnumerator PushSocketAsync(string type, int packageId = 1)
 	{
     	string url = FetchApiUrl() + "api/v1/transaction/game-developer/push-socket";
 		string body = JsonConvert.SerializeObject(new { sessionId = session_id, type });
 		if(type == "IAP_PACKAGE")
-    	body = JsonConvert.SerializeObject(new { sessionId = session_id, type, packageId = 1, purchaseTransactionId = MakeUniqueId(10)});
+    	body = JsonConvert.SerializeObject(new { sessionId = session_id, type, packageId, purchaseTransactionId = MakeUniqueId(10)});
     	long timeStamp = DateTimeOffset.Now.ToUnixTimeSeconds();
     	string new_body = body + "|" + timeStamp;
     	string encrypted_body = Convert.ToBase64String(Encoding.UTF8.GetBytes(new_body));
@@ -520,6 +549,18 @@ public class RumbleSDK : MonoBehaviour
         	if (www.result == UnityWebRequest.Result.Success)
         	{
             	Debug.Log("PushSocket success");
+				if(PlayerPrefs.GetString("RewardAdType") == "LevelsUnlockedAd"){
+					PlayerPrefs.DeleteKey("RewardAdType");
+					PlayerPrefs.SetInt("LevelsUnlocked",0);
+					PlayerPrefs.Save();
+					StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData),PlayerPrefs.GetInt("LevelsUnlocked",1),PlayerPrefs.GetInt("UnlockedAllLevels",1)));
+            	}
+				if(PlayerPrefs.GetString("IAPType") == "UnlockAllLevelsAd"){
+					PlayerPrefs.DeleteKey("IAPType");
+					PlayerPrefs.SetInt("UnlockedAllLevels",0);
+					PlayerPrefs.Save();
+					StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData),PlayerPrefs.GetInt("LevelsUnlocked",1),PlayerPrefs.GetInt("UnlockedAllLevels",1)));
+            	}
         	}
         	else
         	{

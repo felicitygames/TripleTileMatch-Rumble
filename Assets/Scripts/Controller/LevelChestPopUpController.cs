@@ -28,7 +28,7 @@ public class LevelChestPopUpController : MonoBehaviour
         HomeScreenSontroller.Inst.Set_Level_Chest_Text();
         GetComponent<Animator>().SetTrigger("Play");
         GeneralDataManager.GameData.IsLevelChestClaim = true;
-         StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData)));
+         StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData),PlayerPrefs.GetInt("LevelsUnlocked",1),PlayerPrefs.GetInt("UnlockedAllLevels",1)));
     }
 
     public void Give_Coin_Anim()
@@ -53,7 +53,7 @@ public class LevelChestPopUpController : MonoBehaviour
         GameManager.Increase_Coin(amount);
         GeneralRefrencesManager.Inst.No_Click_Panel_On_Off(true);
         StartCoroutine(GameManager.Give_Coin_With_Anim(0, chestIcon, 0, CloseThisPopup, HomeScreenSontroller.Inst.coinRef));
-        StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData)));
+        StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData),PlayerPrefs.GetInt("LevelsUnlocked",1),PlayerPrefs.GetInt("UnlockedAllLevels",1)));
     }
 
     public void On_Close_Btn_Click()

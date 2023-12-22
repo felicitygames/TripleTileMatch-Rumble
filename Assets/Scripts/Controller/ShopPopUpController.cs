@@ -37,7 +37,7 @@ public class ShopPopUpController : SingletonComponent<ShopPopUpController>
     public void Get50CoinsAfterAd()
     {
         Increase_Coin(50);//Increase the coins when you get callback of successfully watched ad on glance integration
-        StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData)));
+        StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData),PlayerPrefs.GetInt("LevelsUnlocked",1),PlayerPrefs.GetInt("UnlockedAllLevels",1)));
     }
 
     internal void Set_Text()
@@ -113,7 +113,7 @@ public class ShopPopUpController : SingletonComponent<ShopPopUpController>
         if (GeneralDataManager.GameData.Coins >= amount)
         {
             Decrease_Coin(amount);
-            StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData)));
+            StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData),PlayerPrefs.GetInt("LevelsUnlocked",1),PlayerPrefs.GetInt("UnlockedAllLevels",1)));
             Increase_Powers(1, powers);
             Set_Text();
 

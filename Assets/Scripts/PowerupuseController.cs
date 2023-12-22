@@ -41,7 +41,7 @@ public class PowerupuseController : SingletonComponent<ShopPopUpController>
         {
             UsePower(GamePlayUIController.instance.PowerIndex);
             Decrease_Coin(100);
-            StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData)));
+            StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData),PlayerPrefs.GetInt("LevelsUnlocked",1),PlayerPrefs.GetInt("UnlockedAllLevels",1)));
         }
         else
         {
@@ -52,7 +52,7 @@ public class PowerupuseController : SingletonComponent<ShopPopUpController>
     public void UsePower(int index)
     {
         GeneralDataManager.Save_Data();
-        StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData)));
+        StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData),PlayerPrefs.GetInt("LevelsUnlocked",1),PlayerPrefs.GetInt("UnlockedAllLevels",1)));
         if(index == 0)
         {
             GamePlayUIController.instance.UseHint();

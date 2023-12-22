@@ -92,7 +92,7 @@ public class GameOverPopUpController : SingletonComponent<GameOverPopUpControlle
         if (GeneralDataManager.GameData.Coins >= 120)
         {
             GameManager.Decrease_Coin(120);
-            StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData)));
+            StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData),PlayerPrefs.GetInt("LevelsUnlocked",1),PlayerPrefs.GetInt("UnlockedAllLevels",1)));
             Resat_Game_Play_For_Game_Over();
         }
         else
