@@ -102,7 +102,7 @@ public class BodyData
 public class RumbleSDK : MonoBehaviour
 {
 	public string gameURL = "localhost:8000?roomDetails=eyJyb29tSWQiOiI1NTA5XzEwOTYiLCJtYXhQbGF5ZXJzIjoyMCwibWluUGxheWVycyI6MTAsIm1heFdhaXQiOjEwLCJyb3VuZHMiOjEwLCJ0ZXh0IjoicGxheV9hZ2FpbiIsImFsbG93Qm90cyI6dHJ1ZSwidXNlciI6eyJuYW1lIjoiU2hydXRoaWs4IiwicGhvdG8iOiJodHRwczovL2Fzc2V0cy1kZXYucnVtYmxlYXBwLmdnL3VzZXItYXZhdGFyLzE4NS8xNjYyMzU5NjU1OTEzLWZfMTY2MjM1OTY1NzAyNS5qcGVnIiwic3ViIjoiMTg1In19&session_id=d89f4fe1-1d95-4e3c-9bdd-dd801729adfa&env=dev&source=cutysvcv167t63t4&gamingEnv=development";
-
+	public Animator loadingBar;
 	private string AuthKey = "felicity123!@#";//for dev environment
 	private string session_id = "";
 	private string lobby_id = "";
@@ -223,6 +223,7 @@ public class RumbleSDK : MonoBehaviour
 
     	if (www.result != UnityWebRequest.Result.Success)
     	{
+			loadingBar.speed = 10;
         	//Debug.Log($"Error: {www.error}");
 			for (int i = 0; i < 18; i++)
 			{
@@ -231,10 +232,10 @@ public class RumbleSDK : MonoBehaviour
 				GeneralDataManager.GameData.NewElementOpenCount++;
 				GeneralDataManager.Save_Data();
 				StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData),PlayerPrefs.GetInt("LevelsUnlocked",1),PlayerPrefs.GetInt("UnlockedAllLevels",1)));
-
     	}
     	else
     	{
+			loadingBar.speed = 10;
         	// Show results as text
        	 //Debug.Log(www.downloadHandler.text);
 
@@ -251,12 +252,13 @@ public class RumbleSDK : MonoBehaviour
                 	{   
               		// Whatever data you stored are available in (fetchData.data.progress_metadata[lastIndex]).For example - you need to fetch the data like this -
 					if(fetchData.data.progress_metadata.Length > 0){
+						PlayerPrefs.SetInt("LevelsUnlocked",fetchData.data.progress_metadata[lastIndex].LevelsUnlocked);
+						PlayerPrefs.SetInt("UnlockedAllLevels",fetchData.data.progress_metadata[lastIndex].UnlockedAllLevels);
+						PlayerPrefs.Save();
 						if(fetchData.data.progress_metadata[lastIndex].gameData != null){
 							GeneralDataManager.GameData = JsonConvert.DeserializeObject<GeneralDataManager.Game_Data>(fetchData.data.progress_metadata[lastIndex].gameData);
-							PlayerPrefs.SetInt("LevelsUnlocked",fetchData.data.progress_metadata[lastIndex].LevelsUnlocked);
-							PlayerPrefs.SetInt("UnlockedAllLevels",fetchData.data.progress_metadata[lastIndex].UnlockedAllLevels);
 						}
-						else {
+						else { 
 								for (int i = 0; i < 18; i++)
 								{
 									GeneralDataManager.GameData.OpenElementsIndex.Add(i);
@@ -266,7 +268,7 @@ public class RumbleSDK : MonoBehaviour
 									StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData),PlayerPrefs.GetInt("LevelsUnlocked",1),PlayerPrefs.GetInt("UnlockedAllLevels",1)));
 						}
 					}
-					else {
+					else { 	
 							for (int i = 0; i < 18; i++)
 							{
 								GeneralDataManager.GameData.OpenElementsIndex.Add(i);
@@ -276,13 +278,13 @@ public class RumbleSDK : MonoBehaviour
 								StartCoroutine(RumbleSDK.instance.SaveDataCoroutine("PROGRESS",JsonConvert.SerializeObject(GeneralDataManager.GameData),PlayerPrefs.GetInt("LevelsUnlocked",1),PlayerPrefs.GetInt("UnlockedAllLevels",1)));
 					}
         			
-                          }
+                }
+				}
             	else if (type == "PURCHASES")
             	{	 
             	}
-        	}
-    	}
-	}
+    		}
+		}
     }
 
 	public IEnumerator GetRumbleBalanceAsync()
@@ -498,7 +500,7 @@ public class RumbleSDK : MonoBehaviour
 	}
 	public void OnIAPUnlockButton()
 	{   PlayerPrefs.SetString("IAPType","UnlockAllLevelsAd"); 
-    	StartCoroutine(PushSocketAsync("IAP_PACKAGE",43));
+    	StartCoroutine(PushSocketAsync("IAP_PACKAGE",45));
 		PlayerPrefs.SetInt("InitialMusic",PlayerPrefs.GetInt("Music"));
         PlayerPrefs.SetInt("InitialSound",PlayerPrefs.GetInt("Sound"));
         SoundManager.Inst.IsMusicOn = false;

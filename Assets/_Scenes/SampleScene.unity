@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 8119298979210083202}
-  m_IndirectSpecularColor: {r: 0.4511453, g: 0.49975878, b: 0.56766486, a: 1}
+  m_IndirectSpecularColor: {r: 0.44837606, g: 0.4964211, b: 0.56500965, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -10385,6 +10385,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameURL: localhost:8000?roomDetails=eyJyb29tSWQiOiI1NTA5XzEwOTYiLCJtYXhQbGF5ZXJzIjoyMCwibWluUGxheWVycyI6MTAsIm1heFdhaXQiOjEwLCJyb3VuZHMiOjEwLCJ0ZXh0IjoicGxheV9hZ2FpbiIsImFsbG93Qm90cyI6dHJ1ZSwidXNlciI6eyJuYW1lIjoiU2hydXRoaWs4IiwicGhvdG8iOiJodHRwczovL2Fzc2V0cy1kZXYucnVtYmxlYXBwLmdnL3VzZXItYXZhdGFyLzE4NS8xNjYyMzU5NjU1OTEzLWZfMTY2MjM1OTY1NzAyNS5qcGVnIiwic3ViIjoiMTg1In19&session_id=d89f4fe1-1d95-4e3c-9bdd-dd801729adfa&env=dev&source=cutysvcv167t63t4&gamingEnv=development
+  loadingBar: {fileID: 317711757}
   startTime: 0
   _postData:
     session_id: 

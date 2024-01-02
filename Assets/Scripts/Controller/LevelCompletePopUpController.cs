@@ -105,6 +105,7 @@ public class LevelCompletePopUpController : MonoBehaviour
         if(GameData.LevelNo >= 10){
             if(GameData.LevelNo % 10 == 0){
                 PlayerPrefs.SetInt("LevelsUnlocked",1);
+                PlayerPrefs.Save();
             }
         }
         GameData.LevelNo++;
